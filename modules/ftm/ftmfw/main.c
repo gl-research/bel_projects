@@ -15,6 +15,10 @@ unsigned int cpuId, cpuQty, heapCap;
 uint64_t SHARED dummy = 0;
 
 
+static uint32_t getNextThreadIdx() {
+  return 0;
+}
+
 void show_msi()
 {
   mprintf(" Msg:\t%08x\nAdr:\t%08x\nSel:\t%01x\n", global_msi.msg, global_msi.adr, global_msi.sel);
@@ -109,6 +113,10 @@ int insertFpqEntry()
 void main(void) {
    
    int j;
+   uint32_t lbtIdx, thrIdx;
+   uint32_t *pOffset;
+   uint32_t *pBlock; 
+
 
    init();
    //uint32_t test = &pFtmIf->tPrep;
@@ -148,31 +156,30 @@ void main(void) {
    
    while (1) {
       cmdEval();
-      processFtm();
+      thrIdx = getNextThreadIdx();
+      lbtIdx = p[(SHCTL_THR_DAT + thrIdx * _TDS_SIZE_ + TD_LBT_IDX) >>2];
       
-      //mprintf("pAct 0x%08x, Qty 0x%08x, pStart 0x%08x, lans[0] 0x%08x,\n", pFtmIf->pAct, pFtmIf->pAct->planQty, pFtmIf->pAct->pStart, pFtmIf->pAct->plans[0]);
       
-      //for (j = 0; j < (125000000/4); ++j) { asm("nop"); }
-      /*
-      ebm_hi(0x0);
-      atomic_on();
-      ebm_op(0x0, 0x0BEEBABE, EBM_WRITE);
-      ebm_op(0x0, 0x1BEEBABE, EBM_WRITE);
-      atomic_off();
-      ebm_flush();
-      
-      for (j = 0; j < div; ++j) {
-         now   = getSysTime();
-         later = getSysTime();
-         diff  = (int64_t) later - (int64_t) now;
-         //mprintf("Min: %d Max: %d\n", (int32_t)diffMin, (int32_t)diffMax);
-         if(diffMin > diff) diffMin = diff;
-         if(diffMax < diff) diffMax = diff;
-         diffSum += diff;
+      pBlock  = (uint32_t*)&p[(SHCTL_LBTAB + LBT_TAB + lbtIdx * _LB_SIZE_ + LB_PTR) >> 2];
+      pOffset = (uint32_t*)&p[(SHCTL_THR_DAT + thrIdx * _TDS_SIZE_ + TD_LBT_IDX) >>2];
+
+      //check if ptr in block table equals the active one minus the offset
+      //if not, update
+      if((pCurrent - *pOffset) != (t_ftmChain*)pBlock) {
+        pCurrent = (t_ftmChain*)pBlock;
+        *pOffset = 0;
       }
-      mprintf("Min: %d Max: %d Avg: %d\n", (int32_t)diffMin, (int32_t)diffMax, ((int32_t)(diffSum / div)));
-      diffSum = 0;
-      */
+
+      //run
+      if ( ((p[(SHCTL_THR_CTL + TC_GET) >>2]) >> thrIdx) & 1) {
+          pCurrent = processChain(pCurrent, pOffset);
+      }
+
+      
+     
    }
+
+
+
 
 }
