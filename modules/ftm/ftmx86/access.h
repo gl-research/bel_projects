@@ -13,6 +13,11 @@
 extern eb_device_t device;
 extern eb_socket_t mySocket;
 
+#define ERROR_ALLOC_BUFFER        -1
+#define ERROR_ALLOC_EMBEDDED_RAM  -2
+#define ERROR_VERIFY_FAILED       -3
+
+
 
 #define SWAP_4(x) ( ((x) << 24) | \
          (((x) << 8) & 0x00ff0000) | \
@@ -105,7 +110,6 @@ extern eb_socket_t mySocket;
 #ifdef __cplusplus
   extern "C" {
 #endif
-
 
 
 
