@@ -14,7 +14,7 @@
          <!-- Cycle A0, entry -->
          <meta>
             <rep>5000</rep>
-            <period>100000</period>
+            <period>1000000000</period>
             <branchpoint>yes</branchpoint>
          </meta>
 
@@ -55,9 +55,35 @@
             </id>
             <par>0xdead0563</par>
             <tef>000</tef>
-            <offs>000050000</offs>
+            <offs>0500000000</offs>
          </msg>
-         
+         <msg>
+             <!-- Msg A0B -->
+            <id>
+               <FID>0</FID>
+               <GID>4095</GID>
+               <EVTNO>2</EVTNO>
+               <SID>0</SID>
+               <BPID>0</BPID>
+            </id>
+            <par>0xdead0564</par>
+            <tef>000</tef>
+            <offs>0500000008</offs>
+         </msg>
+         <msg>
+             <!-- Msg A0C -->
+            <id>
+               <FID>0</FID>
+               <GID>4095</GID>
+               <EVTNO>3</EVTNO>
+               <SID>0</SID>
+               <BPID>0</BPID>
+            </id>
+            <par>0xdead0565</par>
+            <tef>000</tef>
+            <offs>0700000016</offs>
+         </msg>
+
       </chain>
 
       
