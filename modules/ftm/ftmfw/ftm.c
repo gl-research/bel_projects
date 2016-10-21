@@ -299,7 +299,23 @@ inline t_ftmChain* processChainAux(t_ftmChain* c)
             if(c->flags & FLAGS_IS_SIG_ALL)  pFtmIf->sema.sig  = 1;
             if(c->flags & FLAGS_IS_COND_ALL) pFtmIf->sema.cond = 1;
 
+            if((c->flags & FLAGS_IS_BP) && (pFtmIf->pAct->pBp != NULL))       
+           { 
+              pCur = pFtmIf->pAct->pBp;  //BP? go to alt chain
+              
+              pFtmIf->sctr      = 0;
+              pFtmIf->pAct->pBp = NULL;
+              pFtmIf->sema.sig  = 1;
+              pFtmIf->sema.cond = 1;
+              
+              DBPRINT3("BP SemaCond: %u\n", pFtmIf->sema.cond);
+           }
+
          }
+
+                 //is c a branchpoint? if so, jump, reset sequence counter (sctr), semaphores and BP
+         
+       
       } 
       else
       {
@@ -315,21 +331,12 @@ inline t_ftmChain* processChainAux(t_ftmChain* c)
          DBPRINT3("NC SemaCond: %u\n", pFtmIf->sema.cond);
         
       }
-      
+
+
+    
    }
    
-   //is c a branchpoint? if so, jump, reset sequence counter (sctr), semaphores and BP
-   if((c->flags & FLAGS_IS_BP) && (pFtmIf->pAct->pBp != NULL))       
-   { 
-      pCur = pFtmIf->pAct->pBp;  //BP? go to alt chain
-      
-      pFtmIf->sctr      = 0;
-      pFtmIf->pAct->pBp = NULL;
-      pFtmIf->sema.sig  = 1;
-      pFtmIf->sema.cond = 1;
-      
-      DBPRINT3("BP SemaCond: %u\n", pFtmIf->sema.cond);
-   }
+   
     
    return pCur;    
 }
