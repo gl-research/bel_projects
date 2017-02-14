@@ -426,7 +426,8 @@ sig_wb_err: led_n
 
 p_deb_intl: debounce
   generic map (
-    DB_Cnt  => clk_in_hz / (1_000_000/ 2)   -- "DB_Cnt" = fuer 2 us, debounce count gibt die Anzahl von Taktperioden vor, die das
+    DB_cnt  => 5
+    --DB_Cnt  => clk_in_hz / (1_000_000/ 2)   -- "DB_Cnt" = fuer 2 us, debounce count gibt die Anzahl von Taktperioden vor, die das
                                             -- Signal "DB_In" mindestens '1' oder '0' sein muss, damit der Ausgang
                                             -- "DB_Out" diesem Pegel folgt.     
     )
@@ -442,7 +443,8 @@ Interlock_Intr_o <= db_interlock_intr;
 
 p_deb_drdy: debounce
   generic map (
-    DB_Cnt  => clk_in_hz / (1_000_000/ 2)   -- "DB_Cnt" = fuer 2 us, debounce count gibt die Anzahl von Taktperioden vor, die das
+    DB_cnt => 5
+    --DB_Cnt  => clk_in_hz / (1_000_000/ 2)   -- "DB_Cnt" = fuer 2 us, debounce count gibt die Anzahl von Taktperioden vor, die das
                                             -- Signal "DB_In" mindestens '1' oder '0' sein muss, damit der Ausgang
                                             -- "DB_Out" diesem Pegel folgt.     
     )
@@ -458,7 +460,8 @@ Data_Rdy_Intr_o <= db_data_rdy_intr;
 
 p_deb_dreq: debounce
   generic map (
-    DB_Cnt  => clk_in_hz / (1_000_000/ 2)   -- "DB_Cnt" = fuer 2 us, debounce count gibt die Anzahl von Taktperioden vor, die das
+    DB_cnt => 5
+    --DB_Cnt  => clk_in_hz / (1_000_000/ 2)   -- "DB_Cnt" = fuer 2 us, debounce count gibt die Anzahl von Taktperioden vor, die das
                                             -- Signal "DB_In" mindestens '1' oder '0' sein muss, damit der Ausgang
                                             -- "DB_Out" diesem Pegel folgt.     
     )
