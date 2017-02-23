@@ -112,7 +112,11 @@ toolchain-clean::
 	rm -rf toolchain
 
 wrpc-sw-config:
-	$(MAKE) -C ip_cores/wrpc-sw/ gsi_defconfig
+	@echo
+	@test -f ip_cores/wrpc-sw/.config && echo "### Warning: keeping wrpc-sw/ppsi config"
+	@test -f ip_cores/wrpc-sw/.config || echo "### Warning: updating wrpc-sw/ppsi config"
+	@echo "Now waiting for you to read this...."; echo; sleep 5
+	test -f ip_cores/wrpc-sw/.config || $(MAKE) -C ip_cores/wrpc-sw/ gsi_defconfig
 
 firmware::	sdbfs etherbone toolchain wrpc-sw-config
 	$(MAKE) -C ip_cores/wrpc-sw EB=$(PWD)/ip_cores/etherbone-core/api SDBFS=$(PWD)/ip_cores/fpga-config-space/sdbfs/userspace PATH=$(PWD)/toolchain/bin:$(PATH) all
